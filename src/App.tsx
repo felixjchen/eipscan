@@ -140,7 +140,7 @@ function App() {
               </span>
             )}
             {result.error && (
-              <div style={{ fontSize: "0.6em", color: "orange" }}>
+              <div style={{ fontSize: "0.8em", color: "orange" }}>
                 Error: {result.error}
               </div>
             )}
