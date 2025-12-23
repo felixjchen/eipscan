@@ -98,17 +98,15 @@ function App() {
   ).length;
 
   const sortedResults = Object.values(results).sort((a, b) => {
-    if (a.chain.id !== b.chain.id) {
-      return a.chain.id - b.chain.id;
-    }
-    if (a.loading && !b.loading) return -1;
-    if (!a.loading && b.loading) return 1;
-    if (a.loading && b.loading) return 0;
-
     if (a.supported === true && b.supported !== true) return -1;
     if (a.supported !== true && b.supported === true) return 1;
-
-    return 0;
+    if (a.loading && !b.loading) return -1;
+    if (!a.loading && b.loading) return 1;
+    const aHasError = !!a.error;
+    const bHasError = !!b.error;
+    if (aHasError && !bHasError) return 1;
+    if (!aHasError && bHasError) return -1;
+    return a.chain.id - b.chain.id;
   });
 
   return (
@@ -116,7 +114,11 @@ function App() {
       <header className="App-header">
         <h1>EIP-7702 Chain Support</h1>
         <div>
-          https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4.
+          https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4
+        </div>
+        <div>
+          Warning: There seems to be false positives (like HypeEVM) that pass
+          this check.
         </div>
         <div style={{ fontSize: "1.2em", margin: "10px 0" }}>
           Progress: {checkedChains} / {totalChains} chains checked
