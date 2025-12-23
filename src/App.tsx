@@ -116,8 +116,6 @@ function App() {
       <header className="App-header">
         <h1>EIP-7702 Chain Support</h1>
         <div>
-          We check support for EIP7702 by estimating gas for an authorization
-          transaction, per:
           https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4.
         </div>
         <div style={{ fontSize: "1.2em", margin: "10px 0" }}>
