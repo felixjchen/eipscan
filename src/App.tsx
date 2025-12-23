@@ -3,6 +3,10 @@ import * as chains from "viem/chains";
 import { createPublicClient, http, Chain } from "viem";
 import { useEffect, useState } from "react";
 
+const PROD_CHAINS = (Object.values(chains) as Chain[]).filter(
+  (i) => !i.testnet
+);
+const RPC_TIMEOUT = 2000;
 interface ChainResult {
   chain: Chain;
   supported: boolean | null;
@@ -14,7 +18,7 @@ async function checkChain(chain: Chain): Promise<boolean> {
   const client = createPublicClient({
     chain,
     transport: http(chain.rpcUrls.default.http[0], {
-      timeout: 2000,
+      timeout: RPC_TIMEOUT,
     }),
   });
 
@@ -48,13 +52,9 @@ async function checkChain(chain: Chain): Promise<boolean> {
 }
 
 function App() {
-  const prodChains = (Object.values(chains) as Chain[]).filter(
-    (i) => !i.testnet
-  );
-
   const [results, setResults] = useState<Record<string, ChainResult>>(() => {
     const initialResults: Record<string, ChainResult> = {};
-    prodChains.forEach((chain) => {
+    PROD_CHAINS.forEach((chain) => {
       initialResults[chain.id.toString()] = {
         chain,
         supported: null,
@@ -65,7 +65,7 @@ function App() {
   });
 
   useEffect(() => {
-    prodChains.forEach((chain) => {
+    PROD_CHAINS.forEach((chain) => {
       checkChain(chain)
         .then((supported) => {
           setResults((prev) => ({
@@ -89,7 +89,7 @@ function App() {
           }));
         });
     });
-  }, [prodChains]);
+  }, []);
 
   const totalChains = Object.keys(results).length;
   const checkedChains = Object.values(results).filter((r) => !r.loading).length;
@@ -116,7 +116,8 @@ function App() {
       <header className="App-header">
         <h1>EIP-7702 Chain Support</h1>
         <div>
-          We check support for EIP7702 by estimating gas for an authorization transaction, per: 
+          We check support for EIP7702 by estimating gas for an authorization
+          transaction, per:
           https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4.
         </div>
         <div style={{ fontSize: "1.2em", margin: "10px 0" }}>
