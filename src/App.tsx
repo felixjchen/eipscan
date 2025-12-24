@@ -9,7 +9,7 @@ const PROD_CHAINS = (Object.values(chains) as Chain[]).filter(
 const RPC_TIMEOUT = 2000;
 interface ChainResult {
   chain: Chain;
-  supported: boolean | null;
+  eip_7702_supported: boolean | null;
   loading: boolean;
   error?: string;
 }
@@ -57,7 +57,7 @@ function App() {
     PROD_CHAINS.forEach((chain) => {
       initialResults[chain.id.toString()] = {
         chain,
-        supported: null,
+        eip_7702_supported: null,
         loading: true,
       };
     });
@@ -72,7 +72,7 @@ function App() {
             ...prev,
             [chain.id.toString()]: {
               chain,
-              supported,
+              eip_7702_supported: supported,
               loading: false,
             },
           }));
@@ -82,7 +82,7 @@ function App() {
             ...prev,
             [chain.id.toString()]: {
               chain,
-              supported: false,
+              eip_7702_supported: false,
               loading: false,
               error: error.message,
             },
@@ -91,15 +91,11 @@ function App() {
     });
   }, []);
 
-  const totalChains = Object.keys(results).length;
-  const checkedChains = Object.values(results).filter((r) => !r.loading).length;
-  const supportedChains = Object.values(results).filter(
-    (r) => r.supported === true
-  ).length;
-
   const sortedResults = Object.values(results).sort((a, b) => {
-    if (a.supported === true && b.supported !== true) return -1;
-    if (a.supported !== true && b.supported === true) return 1;
+    if (a.eip_7702_supported === true && b.eip_7702_supported !== true)
+      return -1;
+    if (a.eip_7702_supported !== true && b.eip_7702_supported === true)
+      return 1;
     if (a.loading && !b.loading) return -1;
     if (!a.loading && b.loading) return 1;
     const aHasError = !!a.error;
@@ -112,7 +108,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>EIP-7702 Chain Support</h1>
+        <h2>EIP7702</h2>
         <div>
           https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4
         </div>
@@ -120,27 +116,25 @@ function App() {
           Warning: There seems to be false positives (like HypeEVM) that pass
           this check.
         </div>
-        <div style={{ fontSize: "1.2em", margin: "10px 0" }}>
-          Progress: {checkedChains} / {totalChains} chains checked
-          {checkedChains > 0 && ` (${supportedChains} supported)`}
-        </div>
       </header>
-      <div style={{ padding: "20px" }}>
+      <div className="p-5">
         {sortedResults.map((result) => (
           <div
             key={result.chain.id}
-            style={{ padding: "10px", borderBottom: "1px solid #ccc" }}
+            className="p-2.5 border-b border-gray-300"
           >
             <strong>{result.chain.name}</strong> (ID: {result.chain.id})
             {result.loading && <span> - Checking...</span>}
-            {!result.loading && result.supported !== null && (
-              <span style={{ color: result.supported ? "green" : "red" }}>
+            {!result.loading && result.eip_7702_supported !== null && (
+              <span
+                className={result.eip_7702_supported ? "text-green-600" : "text-red-600"}
+              >
                 {" - "}
-                {result.supported ? "✓ Supported" : "✗ Not Supported"}
+                {result.eip_7702_supported ? "✓ Supported" : "✗ Not Supported"}
               </span>
             )}
             {result.error && (
-              <div style={{ fontSize: "0.8em", color: "orange" }}>
+              <div className="text-sm text-orange-500">
                 Error: {result.error}
               </div>
             )}
