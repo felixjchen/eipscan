@@ -140,17 +140,15 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>EIP Scanner</h1>
-        <div>Scan EVM chains for EIP-1559 and EIP-7702 support.</div>
-        <h2>EIP1559</h2>
-        <div>
+        <h1 className="text-3xl font-bold mb-2">EIP Scanner</h1>
+        <div className="text-base mb-4">Scan EVM chains for EIP-1559 and EIP-7702 support.</div>
+        <h2 className="text-xl font-semibold mt-4">EIP-1559</h2>
+        <div className="text-sm mb-3">Checks for base fee support via eth_getBlockByNumber and eth_feeHistory.</div>
+        <h2 className="text-xl font-semibold mt-2">EIP-7702</h2>
+        <div className="text-sm mb-1">
           https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4
         </div>
-        <h2>EIP7702</h2>
-        <div>
-          https://medium.com/@Jingkangchua/how-to-quickly-verify-eip-7702-support-on-any-evm-chain-39975a08dcd4
-        </div>
-        <div className="text-yellow-100">
+        <div className="text-sm text-yellow-100">
           Warning: There seems to be false positives (like HypeEVM) that pass
           this check.
         </div>
