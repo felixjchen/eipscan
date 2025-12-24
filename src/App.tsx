@@ -173,8 +173,8 @@ function App() {
       </header>
       <div className="p-5">
         <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-slate-200 bg-opacity-10">
+          <thead className="sticky top-0 z-10">
+            <tr className="bg-slate-700">
               <th
                 className="p-3 text-left cursor-pointer"
                 onClick={() => handleSort("name")}
